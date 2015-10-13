@@ -314,7 +314,6 @@ function token (options) {
       agentOptions: self.agentOptions
     })
     .then(function (data) {
-
       // verify tokens
       async.parallel({
         id_claims: function (done) {
