@@ -363,7 +363,7 @@ describe 'Access Token', ->
           exp: Date.now()
           iat: Date.now()
           aud: 'https://your.client.app'
-          scope: 'openid profile'
+          scope: 'openid email profile'
 
         jwt = (new AccessToken payload).encode(privateKey)
 
@@ -371,6 +371,7 @@ describe 'Access Token', ->
           issuer: payload.iss
           aud: payload.aud
           key: publicKey
+          scope: 'openid profile email'
 
         AccessToken.verify jwt, options, (error, accesstoken) ->
           err   = error
