@@ -59,6 +59,23 @@ function getUser (id, options) {
 exports.get = getUser
 
 /**
+ * Retrieves a user's accoint details identified by it's login email
+ * @method getUsetByEmail
+ * @param email {String} User's email
+ * @param options {Object} Options hashmap object
+ * @param options.token {String} (Required) Access token. Gets sent as an
+ *   Authorization: Bearer <token> header.
+ * @param [options.headers={}] {Object} Optional hashmap of additional headers
+ * @return {Promise<Request>}
+ */
+function getUserByEmail (email, options) {
+  options = options || {}
+  options.url = '/v1/users/email/' + email
+  return request.bind(this)(options)
+}
+exports.getByEmail = getUserByEmail
+
+/**
  * Creates a user via a REST request to the AnvilConnect server's /users API.
  * Usage:
  *
