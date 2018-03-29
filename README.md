@@ -311,8 +311,10 @@ client.getClientAccessToken()
 
 #### client.users.list()
 #### client.users.get(id)
+#### client.users.getByEmail(email)
 #### client.users.create(data)
 #### client.users.update(id, data)
+#### client.users.updatePassword(id, password)
 #### client.users.delete(id)
 
 ### Example
