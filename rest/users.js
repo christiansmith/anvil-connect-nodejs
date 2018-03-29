@@ -114,6 +114,26 @@ function updateUser (id, data, options) {
 exports.update = updateUser
 
 /**
+ * Updates a user's password.
+ * @method updateUser
+ * @param id {String} User ID (`sub` in the ID Token)
+ * @param password {String} New password
+ * @param options {Object} Options hashmap object
+ * @param options.token {String} (Required) Access token. Gets sent as an
+ *   Authorization: Bearer <token> header.
+ * @param [options.headers={}] {Object} Optional hashmap of additional headers
+ * @return {Promise<Request>}
+ */
+function updateUserPassword (id, password, options) {
+  options = options || {}
+  options.url = '/v1/users/' + id + '/password'
+  options.method = 'PATCH'
+  options.json = {password: password}
+  return request.bind(this)(options)
+}
+exports.updatePassword = updateUserPassword
+
+/**
  * Deletes a user via a REST request to the AnvilConnect server's /users API.
  * @method deleteUser
  * @param id {String} User ID (`sub` in the ID Token).
