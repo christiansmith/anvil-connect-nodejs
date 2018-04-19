@@ -277,6 +277,7 @@ function initAdminAPI () {
   this.users = {
     list: users.list.bind(this),
     get: users.get.bind(this),
+    getByEmail: users.getByEmail.bind(this),
     create: users.create.bind(this),
     update: users.update.bind(this),
     delete: users.delete.bind(this),

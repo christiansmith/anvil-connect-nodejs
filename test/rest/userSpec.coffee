@@ -217,8 +217,101 @@ describe 'REST API User Methods', ->
       it 'should catch an error', ->
         failure.should.have.been.called
 
+  describe 'getByEmail', ->
+
+    describe 'with a missing access token', ->
+      {promise,success,failure} = {}
+
+      beforeEach (done) ->
+        instance =
+          configuration:
+            issuer: 'https://connect.anvil.io'
+          agentOptions: {}
+
+        nock.cleanAll()
+        nock(instance.configuration.issuer)
+          .get('/v1/users/email/mail')
+          .reply(200, {_id: 'uuid', email: 'mail'})
+
+        success = sinon.spy -> done()
+        failure = sinon.spy -> done()
+
+        promise = users.getByEmail.bind(instance)('uuid')
+          .then(success, failure)
+
+      it 'should return a promise', ->
+        promise.should.be.instanceof Promise
+
+      it 'should not provide users', ->
+        success.should.not.have.been.called
+
+      it 'should catch an error', ->
+        failure.should.have.been.calledWith sinon.match.instanceOf Error
 
 
+    describe 'with a successful response', ->
+
+      {promise,success,failure} = {}
+
+      before (done) ->
+        instance =
+          configuration:
+            issuer: 'https://connect.anvil.io'
+          tokens:
+            access_token: 'random'
+          agentOptions: {}
+
+        nock.cleanAll()
+        nock(instance.configuration.issuer)
+          .get('/v1/users/email/mail')
+          .reply(200, {_id: 'uuid', email: 'mail'})
+
+        success = sinon.spy -> done()
+        failure = sinon.spy -> done()
+
+        promise = users.getByEmail.bind(instance)('mail', { token: 'token' })
+          .then(success, failure)
+
+      it 'should return a promise', ->
+        promise.should.be.instanceof Promise
+
+      it 'should provide the user', ->
+        success.should.have.been.calledWith sinon.match {_id: 'uuid', email: 'mail'}
+
+      it 'should not catch an error', ->
+        failure.should.not.have.been.called
+
+    describe 'with a failure response', ->
+
+      {promise,success,failure} = {}
+
+      before (done) ->
+        instance =
+          configuration:
+            issuer: 'https://connect.anvil.io'
+          tokens:
+            access_token: 'random'
+          agentOptions: {}
+
+        nock.cleanAll()
+        nock(instance.configuration.issuer)
+          .get('/v1/users/email/mail')
+          .reply(404, 'Not found')
+
+        success = sinon.spy -> done()
+        failure = sinon.spy -> done()
+
+        promise = users.getByEmail.bind(instance)('mail', { token: 'token' })
+          .then(success, failure)
+
+      it 'should return a promise', ->
+        promise.should.be.instanceof Promise
+
+      it 'should not provide the user', ->
+        success.should.not.have.been.called
+
+      it 'should catch an error', ->
+        failure.should.have.been.called
 
   describe 'create', ->
 
